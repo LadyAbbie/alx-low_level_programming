@@ -1,32 +1,38 @@
 #include <stdio.h>
-#include "holberton.h"
-
+#define LARGEST 10000000000
 /**
- * print_to_98 - prints numbers to 98
- * @n: starting integer
- *
- * Description: prints all natural number from n - 98
- *
- * Return: void
+ * main - main block
+ * Description: Find and print the first 98 fib numbers starting with 1 and 2.
+ * Numbers should be coma and space separated.
+ * Return: 0
  */
-
-void print_to_98(int n)
+int main(void)
 {
-	if (n < 98)
+	unsigned long int fr1 = 0, bk1 = 1, fr2 = 0, bk2 = 2;
+	unsigned long int hold1, hold2, hold3;
+	int count;
+
+	printf("%lu, %lu, ", bk1, bk2);
+	for (count = 2; count < 98; count++)
 	{
-		while (n < 98)
+		if (bk1 + bk2 > LARGEST || fr2 > 0 || fr1 > 0)
 		{
-			printf("%d, ", n);
-			n++;
+			hold1 = (bk1 + bk2) / LARGEST;
+			hold2 = (bk1 + bk2) % LARGEST;
+			hold3 = fr1 + fr2 + hold1;
+			fr1 = fr2, fr2 = hold3;
+			bk1 = bk2, bk2 = hold2;
+			printf("%lu%010lu", fr2, bk2);
 		}
-	}
-	else if (n > 98)
-	{
-		while (n > 98)
+		else
 		{
-			printf("%d, ", n);
-			n--;
+			hold2 = bk1 + bk2;
+			bk1 = bk2, bk2 = hold2;
+			printf("%lu", bk2);
 		}
+		if (count != 97)
+			printf(", ");
 	}
-	printf("98\n");
+	printf("\n");
+	return (0);
 }
