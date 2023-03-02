@@ -1,24 +1,28 @@
 #include "main.h"
-
+#define NULL 0
 /**
- * _strcmp - Entry point
- * Description: Compares two strings
- * @s1: Char
- * @s2: Char
- * Return: char
+ * _strchr - locates a character in a string
+ * @s: string
+ * @c: character to search
+ * Return: pointer to first occurrence of c
  */
 
-int _strcmp(char *s1, char *s2)
+char *_strchr(char *s, char c)
 {
 	int i = 0;
 
-	while (s1[i] == s2[i])
+	while (*(s + i) != '\0')
 	{
-		if (s1[i] == '\0')
+		if (*(s + i) == c)
 		{
-			return (0);
+			return (s + i);
 		}
+
 		i++;
 	}
-	return (s1[i] - s2[i]);
+	if (c == '\0')
+	{
+		return (s + i);
+	}
+	return (NULL);
 }
