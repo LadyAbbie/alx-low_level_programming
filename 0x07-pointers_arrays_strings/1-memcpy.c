@@ -1,34 +1,23 @@
 #include "main.h"
 
 /**
- * _strspn - gets the length of a prefix substring
- * @s: s is a character
- * @accept: accept is a character
+ * _memcpy - copies memory area.
+ * @dest: dest is a character
+ * @src: src is a character
+ * @n: n is an unsigned integer
  *
- * Return: Integer
+ * Return: Pointer to dest
 */
 
-unsigned int _strspn(char *s, char *accept)
+char *_memcpy(char *dest, char *src, unsigned int n)
 {
-	unsigned int count = 0;
-	int i, j;
+	char *original_dest = dest;
 
-	for (i = 0; s[i] != '\0'; i++)
+	while (n != 0)
 	{
-		for (j = 0; accept[j] != '\0'; j++)
-		{
-			if (s[i] == accept[j])
-			{
-				count++;
-				break;
-			}
-		}
-
-		if (accept[j] == '\0')
-		{
-			break;
-		}
+		*dest++ = *src++;
+		n--;
 	}
 
-	return (count);
+	return (original_dest);
 }
