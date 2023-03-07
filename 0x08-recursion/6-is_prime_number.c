@@ -1,27 +1,32 @@
 #include "main.h"
 
 /**
- * check_int - checks integer as candidate for prime number
- * @prime number: prime number integer
- * @x: integer
- * Return: 1 if
+ * prime_check - Check if number is prime
+ * @n: Number to check
+ * @f: Number to check against
+ *
+ * Return: 1 if prime, 0 if otherwise
  */
-
-int is_prime_number(int n);
-   int loop, number;
-   int prime = 1;
-   
-   number = 11;
-
-   for(loop = 2; loop < number; loop++) {
-      if((number % loop) == 0) {
-         prime = 0;
-      }
-   }
-
-   if (prime == 1)
-      printf("%d is prime number.", number);
-   else
-      printf("%d is not a prime number.", number);
-   return 0;
+int prime_check(int n, int f)
+{
+	if (n % f == 0 && f != (n / 2))
+		return (0);
+	else if (f >= (n / 2))
+		return (1);
+	else
+		return (prime_check(n, f + 1));
+}
+/**
+ * is_prime_number - Find if a given number is prime
+ * @n: Number to check
+ *
+ * Return: 1 if prime, 0 if otherwise
+ */
+int is_prime_number(int n)
+{
+	if (n > 1)
+		return (prime_check(n, 2));
+	else if (n < 0)
+		return (0);
+	return (0);
 }
