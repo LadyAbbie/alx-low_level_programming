@@ -1,5 +1,12 @@
 #include "main.h"
 
+/**
+ * check_int - checks integer as candidate for prime number
+ * @prime number: prime number integer
+ * @x: integer
+ * Return: 1 if
+ */
+
 int is_prime_number(int n);
    int loop, number;
    int prime = 1;
