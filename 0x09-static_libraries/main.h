@@ -3,7 +3,7 @@
 
 /*
  * File: main.h
- * Auhtor: LadyAbbie
+ * Auhtor: TobiLight
  * Description: Header file that contains or the
  *              prototypes of all the functions included
  *              in the static library libmy.a
