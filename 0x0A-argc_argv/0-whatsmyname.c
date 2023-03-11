@@ -1,14 +1,20 @@
-#include "main.h"
+#include <stdio.h>
+
+/*
+ * File: 0-whatsmyname.c
+ * Author: LadyAbbie
+*/
 
 /**
- * main - Print the name of the executable file
- * @argc: Argument count
- * @argv: Array of argument strings
+ * main - Prints the name of the program
+ * @argc: Number of command line arguments
+ * @argv: Array name
  *
- * Return: 0 for succesful exit
- */
-int main(int argc __attribute__((unused)), char *argv[])
+ * Return: Integer - 0
+*/
+
+int main(int argc, char *argv[])
 {
-	printf("%s\n", argv[0]);
+	printf("%s\n", argv[argc * 0]);
 	return (0);
 }
