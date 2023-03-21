@@ -1,17 +1,12 @@
-#include "0-object_like_macro.h"
-#include "0-object_like_macro.h"
-#include <stdio.h>
+#ifndef OBJECT_LIKE_MACRO_H
+#define OBJECT_LIKE_MACRO_H
 
 /**
- * main - check the code
- *
- * Return: Always 0.
+ * File: 0-object_like_macro.h
+ * Description: Header file that defines a macro named
+ * SIZE as an abbreviation for the token 1024
  */
-int main(void)
-{
-    int s;
 
-    s = 98 + SIZE;
-    printf("%d\n", s);
-    return (0);
-}
+#define SIZE 1024
+
+#endif /* OBJECT_LIKE_MACRO_H */
