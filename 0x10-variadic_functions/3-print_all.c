@@ -1,51 +1,89 @@
 #include "variadic_functions.h"
+#include <stdio.h>
 #include <stdlib.h>
+#include <stdarg.h>
 
 /**
- * print_all - function that prints anything.
- *
- * @format: a list of types of arguments passed to the function.
- * Return: void.
+ * print_char - print char
+ * @args: list of arguments
+ */
+
+void print_char(va_list args)
+{
+	printf("%c", va_arg(args, int));
+}
+
+/**
+ * print_int - print int
+ * @args: list of arguments
+ */
+
+void print_int(va_list args)
+{
+	printf("%d", va_arg(args, int));
+}
+
+/**
+ * print_float - print float
+ * @args: list of arguments
+ */
+
+void print_float(va_list args)
+{
+	printf("%f", va_arg(args, double));
+}
+
+/**
+ * print_string - print string
+ * @args: list of arguments
+ */
+
+void print_string(va_list args)
+{
+	char *s = va_arg(args, char *);
+
+	if (s == NULL)
+	{
+		printf("(nil)");
+		return;
+	}
+	printf("%s", s);
+}
+
+/**
+ * print_all - prints anything*
+ * @format: list of types of arguments
  */
 
 void print_all(const char * const format, ...)
 {
 	va_list args;
-	int i = 0;
-	char *s;
+	int i, j;
+	char *s1 = "";
+	char *s2 = ", ";
+
+	op_t ops[] = {
+		{'c', print_char},
+		{'i', print_int},
+		{'f', print_float},
+		{'s', print_string},
+		{'\0', NULL}
+	};
 
 	va_start(args, format);
-	/* loop through the format string */
-	while (format && format[i])
+	i = 0;
+	while (format != NULL && format[i] != '\0')
 	{
-		switch (format[i])
+		j = 0;
+		while (ops[j].c != '\0')
 		{
-			case 'c':
-				printf("%c", va_arg(args, int));
-				break;
-			case 'i':
-				printf("%d", va_arg(args, int));
-				break;
-			case 'f':
-				printf("%f", (float) va_arg(args, double));
-				break;
-			case 's':
-				s = va_arg(args, char *);
-				if (s == NULL)
-				{
-					printf("(nil)");
-					break;
-				}
-				printf("%s", s);
-				break;
-			default:
-				i++;
-				continue;
-		}
-		/* if there is another format specifier */
-		if (format[i + 1])
-		{
-			printf(", ");
+			if (ops[j].c == format[i])
+			{
+				printf("%s", s1);
+				ops[j].f(args);
+				s1 = s2;
+			}
+			j++;
 		}
 		i++;
 	}
