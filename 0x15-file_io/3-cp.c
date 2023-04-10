@@ -1,85 +1,67 @@
 #include "main.h"
-
-void error(char *msg, int code);
-void copy(char *file_from, char *file_to);
+#include <stdarg.h>
 
 /**
- * error - Prints an error mesage and exits with the given error code
- * @msg: Error message
- * @code: Error code to exit with
+ * error_handler - handles errors for cp
+ * @exit_code: exit code
+ * @message: error message
+ * @type: data type for format
  */
 
-void error(char *msg, int code)
+void error_handler(int exit_code, char *message, char type, ...)
 {
-	/* Prints error message to standard error */
-	dprintf(STDERR_FILENO, msg, code);
-	dprintf(STDERR_FILENO, "\n");
-	/* Exits with given error code */
-	exit(code);
+	va_list args;
+
+	va_start(args, type);
+	if (type == 's')
+		dprintf(STDERR_FILENO, message, va_arg(args, char *));
+	else if (type == 'd')
+		dprintf(STDERR_FILENO, message, va_arg(args, int));
+	else if (type == 'N')
+		dprintf(STDERR_FILENO, message, "");
+	else
+		dprintf(STDERR_FILENO, "Error: Does not match any type\n");
+	va_end(args);
+	exit(exit_code);
 }
 
 /**
- * copy - Copies content from one file to another
- * @file_from - Name of the file to copy from
- * @file_to - Name of the file to copy to
+ * main - copies the content of a file to another file
+ * @argc: number of arguments
+ * @argv: array of arguments
+ * Return:  0 (Always)
  */
 
-void copy(char *file_from, char *file_to)
+int main(int argc, char *argv[])
 {
-	ssize_t fd, fd_in, fd_out, my_write;
-	char buffer[BUFFER_SIZE];
+	char buffer[1024];
+	int fd_s, fd_d;
+	ssize_t bytes_read, bytes_written;
 
-	/* Open input file to be read */
-	fd_in = open(file_from, O_RDONLY);
-	if (fd_in < 0)
-	{
-		error("Error: Can't read from file %s", 98);
-	}
-	/* Opens output file for writing, create if it doesn't exist */
-	fd_out = open(file_to, O_CREAT | O_WRONLY | O_TRUNC, 0644);
-	if (fd_out < 0)
-	{
-		error("Error: Can't write to %s", 99);
-	}
-	/* Copy content from input to output file */
-	fd = read(fd_in, buffer, BUFFER_SIZE);
-	my_write = write(fd_out, buffer, fd);
-	while (fd > 0)
-	{
-		if (my_write < 0 || my_write != fd)
-		{
-			error("Error: Can't write to %s", 99);
-		}
-	}
-	if (fd < 0)
-	{
-		error("Error: Can't read from file %s", 98);
-	}
-	if (close(fd_in) < 0)
-	{
-		error("Error: Can't close fd %d", 100);
-	}
-	if (close(fd_out) < 0)
-	{
-		error("Error: Can't close fd %d", 100);
-	}
-}
-
-/**
- * main - Calls othe functions declare, copy and error
- * @argc: Number of arguements
- * @argv: Array of strings
- *
- * Return: 0, if successful
- */
-
-int main(int argc, char **argv)
-{
 	if (argc != 3)
+		error_handler(97, "Usage: cp file_from file_to\n", 'N');
+
+	fd_s = open(argv[1], O_RDONLY);
+	if (fd_s == -1)
+		error_handler(98, "Error: Can't read from file %s\n", 's', argv[1]);
+
+	fd_d = open(argv[2], O_CREAT | O_WRONLY | O_TRUNC, 0664);
+	if (fd_d == -1)
+		error_handler(99, "Error: Can't write to %s\n", 's', argv[2]);
+
+	while ((bytes_read = read(fd_s, buffer, 1024)) > 0)
 	{
-		error("Usage: cp file_from file_to", 97);
+		bytes_written = write(fd_d, buffer, bytes_read);
+		if (bytes_written == -1)
+			error_handler(99, "Error: Can't write to %s\n", 's', argv[2]);
 	}
-	copy(argv[1], argv[2]);
+
+	if (bytes_read == -1)
+		error_handler(98, "Error: Can't read from file %s\n", 's', argv[1]);
+	if (close(fd_s) == -1)
+		error_handler(100, "Error: Can't close fd %d\n", 'd', fd_s);
+	if (close(fd_d) == -1)
+		error_handler(100, "Error: Can't close fd %d\n", 'd', fd_d);
 
 	return (0);
 }
